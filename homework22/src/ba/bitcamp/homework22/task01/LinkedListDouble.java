@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 public class LinkedListDouble {
 
 	/**
-	 * creating a node start which represents a head fof node
+	 * creating a node start which represents a head of node
 	 */
 	private Node start;
 
@@ -32,7 +32,7 @@ public class LinkedListDouble {
 	 */
 	public class Node {
 
-		private double value;
+		private Double value;
 		private Node next;
 
 		/**
@@ -41,7 +41,7 @@ public class LinkedListDouble {
 		 * @param value
 		 *            a number that user insert
 		 */
-		public Node(double value) {
+		public Node(Double value) {
 			super();
 			this.value = value;
 			next = null;
@@ -53,11 +53,11 @@ public class LinkedListDouble {
 		 * @return
 		 */
 
-		public double getValue() {
+		public Double getValue() {
 			return value;
 		}
 
-		public void setValue(double value) {
+		public void setValue(Double value) {
 			this.value = value;
 		}
 
@@ -76,7 +76,7 @@ public class LinkedListDouble {
 		public String toString() {
 
 			if (next == null) {
-				return value + " ";
+				return String.valueOf(value);
 			}
 			return value + " " + next.toString();
 
@@ -92,30 +92,29 @@ public class LinkedListDouble {
 	 * @return
 	 */
 
-	public void add(double element) {
-		/**
-		 * creating a temporary Node which is at start null
-		 */
-		Node tmp = null;
+	public void add(Double element) {
 
 		/**
 		 * when stack is empty just create a new node and make it a start node
 		 */
 		if (start == null) {
 			start = new Node(element);
+			return;
 
-		} else {
-			/**
-			 * if stack is not empty, create new node with value creating a
-			 * connection between this node and existing one saying that this
-			 * new node is a start of a stack
-			 */
+		}
+		/**
+		 * if stack is not empty, create new node with value and add that node
+		 * at the end of stack
+		 */
 
-			tmp = new Node(element);
-			tmp.setNext(start);
-			start = tmp;
+		Node tmp = start;
+
+		while (tmp.getNext() != null) {
+
+			tmp = tmp.getNext();
 		}
 
+		tmp.setNext(new Node(element));
 	}
 
 	/**
@@ -125,56 +124,24 @@ public class LinkedListDouble {
 	 */
 
 	public void remove(int index) {
-		/**
-		 * the case when we want to remove a start node
-		 */
-		if (index == 0) {
-			start = start.getNext();
-		}
 
-		/**
-		 * creating a temporary node which is used to save start value
-		 * 
-		 */
-		Node tmp = start;
-		try {
-			/**
-			 * finding an node in stack that is on index we want removing that
-			 * node by removing a pointer that points from previous to that
-			 * node, and setting a pointer from previous to a node that comes
-			 * after the one we want to remove
-			 */
-			for (int i = 0; i < index; i++) {
-				tmp = tmp.getNext();
-
-				Node previous = getPreviousNode(tmp);
-
-				previous.setNext(tmp.getNext());
-
-			}
-		} catch (NullPointerException e) {
+		if (start == null) {
+			return;
 
 		}
-	}
-
-	/**
-	 * finding a previous node
-	 * 
-	 * @param n
-	 *            a node that we want to find the knot's predecessor
-	 * @return
-	 */
-	public Node getPreviousNode(Node n) {
-		if (n == start) {
-			return null;
+		if (index < 0 || index > size()) {
+			throw new IllegalArgumentException();
 		}
 
-		Node tmp = start;
-		while (tmp.getNext() != n) {
-			tmp = tmp.getNext();
+		Node previous = start;
+
+		for (int i = 0; i < index - 1; i++) {
+
+			previous = previous.getNext();
 		}
 
-		return tmp;
+		Node tmp = previous.getNext();
+		previous.setNext(tmp.getNext());
 	}
 
 	/**
@@ -185,7 +152,10 @@ public class LinkedListDouble {
 	 * @return
 	 */
 
-	public double get(int index) {
+	public Double get(int index) {
+		if (start == null) {
+			return null;
+		}
 		Node tmp = start;
 
 		for (int i = 0; i < index; i++) {
@@ -219,12 +189,13 @@ public class LinkedListDouble {
 	 * 
 	 * @return
 	 */
-	public double middle() {
+	public Double middle() {
+
 		return get((size() - 1) / 2);
 
 	}
 
-	public double getFirst() throws NoSuchElementException {
+	public Double getFirst() throws NoSuchElementException {
 		if (start == null) {
 			throw new NoSuchElementException();
 		} else {
@@ -232,12 +203,14 @@ public class LinkedListDouble {
 		}
 	}
 
-	public double getLast() throws NoSuchElementException {
+	public Double getLast() throws NoSuchElementException {
 
-		if (start == null) {
+		int currentSize = size();
+
+		if ((start == null) || (currentSize == 0)) {
 			throw new NoSuchElementException();
 		} else {
-			return get(size() - 1);
+			return get(currentSize - 1);
 		}
 	}
 
@@ -250,10 +223,11 @@ public class LinkedListDouble {
 	}
 
 	public void deleteLast() throws NoSuchElementException {
-		if (start == null) {
+		int currentSize = size();
+		if ((start == null) || currentSize == 0) {
 			throw new NoSuchElementException();
 		} else {
-			remove(size() - 1);
+			remove(currentSize - 1);
 		}
 	}
 
@@ -281,10 +255,29 @@ public class LinkedListDouble {
 		stack.add(6.5);
 		stack.add(232.46);
 		stack.add(3.2);
-		// stack.remove(0);
-		System.out.println(stack.size());
-		System.out.println(stack.middle());
-		// System.out.println(stack.get());
 		System.out.println(stack);
+		System.out.println("**********************************");
+
+		System.out.println("Removing");
+		stack.remove(3);
+
+		System.out.println(stack);
+		System.out.println("**********************************");
+
+		System.out.println("Middle node");
+		System.out.println(stack.middle());
+		System.out.println("**********************************");
+
+		System.out.println("Stack size");
+		System.out.println(stack.size());
+		System.out.println("**********************************");
+
+		System.out.println("Getting a node");
+		System.out.println(stack.get(0));
+
+		 stack.remove(46566);
+		// stack.remove(1);
+		// stack.remove(0);
+		// stack.remove(3);
 	}
 }
