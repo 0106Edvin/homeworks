@@ -1,5 +1,4 @@
 google.ba google
 klix.ba klix
-index.hr index
 dnevnik.hr dnevnik
- 
+index.hr index

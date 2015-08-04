@@ -29,13 +29,16 @@ public class NormalClient {
 			/**
 			 * Checking if link is correct
 			 */
+			
 			if (link.length() > 0 && link.contains(" ")) {
 				writer.write(link);
 				writer.newLine();
 				writer.close();
+				
+				
 			} else
 				System.out.println("Your link is incorrect");
-
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

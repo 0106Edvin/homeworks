@@ -31,11 +31,12 @@ public class NormalServer {
 			String input = "";
 			String link = "";
 			String linkName = "";
+			//System.out.println(reader.readLine());
 
 			/**
 			 * splitting input from client to linkName and link
 			 */
-			while (reader.ready()) {
+			while ((input = reader.readLine()) != null) {
 
 				if (input.split(" ").length > 1) {
 
@@ -48,7 +49,7 @@ public class NormalServer {
 			/**
 			 * writing link name and link into a file
 			 */
-
+			
 			writer.write(linkName + " " + link);
 			writer.newLine();
 			writer.flush();
