@@ -17,9 +17,7 @@ public class BufferedImageThreads extends JFrame {
 	private static BufferedImage image = null;
 	private JPanel panel = new JPanel();
 	private static LinkedBlockingQueue<Runnable> jobs;
-	private static ArrayList<Worker> workers;
-	private static int a = 0;
-	private static int b = 10;
+	private ArrayList<Worker> workers;
 
 	public static void main(String[] args) {
 		new BufferedImageThreads();
@@ -54,6 +52,8 @@ public class BufferedImageThreads extends JFrame {
 		 */
 		jobs = new LinkedBlockingQueue<Runnable>();
 
+		int a = 0;
+		int b = 10;
 		for (int i = 0; i < 136; i++) {
 
 			jobs.add(new Task(a, b));
@@ -70,12 +70,14 @@ public class BufferedImageThreads extends JFrame {
 		for (int i = 0; i < 8; i++) {
 			Worker s = new Worker();
 			s.start();
+			workers.add(s);
+		}
+		for (Worker w : workers) {
 			try {
-				s.join();
+				w.join();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			workers.add(s);
 		}
 
 	}
@@ -122,11 +124,10 @@ public class BufferedImageThreads extends JFrame {
 		@Override
 		public void run() {
 			while (!jobs.isEmpty()) {
-				try {
-					Runnable job = jobs.take();
+				Runnable job = jobs.poll();
 
-					job.run();
-				} catch (InterruptedException e) {
+				job.run();
+				if (jobs == null) {
 					break;
 				}
 			}

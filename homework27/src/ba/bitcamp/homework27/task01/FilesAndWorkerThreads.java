@@ -48,15 +48,16 @@ public class FilesAndWorkerThreads {
 			for (int i = 0; i < 8; i++) {
 				Producer p = new Producer();
 				p.start();
+				producers.add(p);
+			}
+			for (Producer p : producers) {
 				try {
 					p.join();
 				} catch (InterruptedException e) {
 
 					e.printStackTrace();
 				}
-				producers.add(p);
 			}
-
 			/**
 			 * Printing the result
 			 */
@@ -79,11 +80,10 @@ public class FilesAndWorkerThreads {
 		@Override
 		public void run() {
 			while (!jobs.isEmpty()) {
-				try {
-					Runnable job = jobs.take();
-					job.run();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				Runnable job = jobs.poll();
+				job.run();
+				if(jobs == null){
+					break;
 				}
 			}
 
