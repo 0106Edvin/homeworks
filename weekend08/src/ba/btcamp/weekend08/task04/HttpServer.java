@@ -21,8 +21,8 @@ public class HttpServer {
 		ServerSocket server = null;
 		Socket client = null;
 
+		System.out.println("Server started");
 		try {
-			System.out.println("Server started");
 			server = new ServerSocket(8888);
 			client = server.accept();
 
@@ -38,21 +38,13 @@ public class HttpServer {
 				Socket client1 = server.accept();
 				System.out.println("New client connected");
 
-				try {
-					// Calling method that simulates http server
-					httpServer(client1, f);
-
-				} catch (NullPointerException e) {
-					continue;
-				}
+				// Calling method that simulates http server
+				httpServer(client1, f);
 
 			}
-
 		} catch (IOException e) {
-
 			e.printStackTrace();
 		}
-
 	}
 
 	/**
@@ -77,6 +69,9 @@ public class HttpServer {
 		String htmlDoc = "";
 
 		String fromClient = br.readLine();
+		if (fromClient == null){
+			return;
+		}
 		String address = "files.html";
 		String[] wantedAddress = fromClient.split(" ");
 		// Redirecting to picture link
