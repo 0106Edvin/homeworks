@@ -81,10 +81,10 @@ public class FilesAndWorkerThreads {
 		public void run() {
 			while (!jobs.isEmpty()) {
 				Runnable job = jobs.poll();
-				job.run();
-				if(jobs == null){
+				if(job == null){
 					break;
 				}
+				job.run();
 			}
 
 		}

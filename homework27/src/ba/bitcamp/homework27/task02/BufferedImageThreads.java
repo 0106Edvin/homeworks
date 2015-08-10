@@ -126,10 +126,11 @@ public class BufferedImageThreads extends JFrame {
 			while (!jobs.isEmpty()) {
 				Runnable job = jobs.poll();
 
-				job.run();
-				if (jobs == null) {
+				if (job == null) {
 					break;
 				}
+				job.run();
+
 			}
 		}
 	}
