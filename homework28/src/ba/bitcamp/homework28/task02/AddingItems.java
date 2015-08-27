@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -51,13 +52,14 @@ public class AddingItems extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				/**
-				 * taking product name from text field and put into string productName
+				 * taking product name from text field and put into string
+				 * productName
 				 */
 				String productName = fieldName.getText().toString();
-				
+
 				/**
-				 * checking if product code have 10 digits
-				 * If not show message dialog and exit program
+				 * checking if product code have 10 digits If not show message
+				 * dialog and exit program
 				 */
 				if (fieldCode.getText().length() != 10) {
 					JOptionPane.showMessageDialog(null,
@@ -67,10 +69,9 @@ public class AddingItems extends JFrame {
 					/**
 					 * if code is correct parse it and put into long productCode
 					 */
-					productCode = Long.parseLong(fieldCode.getText()
-							);
+					productCode = Long.parseLong(fieldCode.getText());
 				}
-				
+
 				/**
 				 * taking price from text field and put into double price
 				 */
@@ -87,38 +88,36 @@ public class AddingItems extends JFrame {
 					Statement statement = conn.createStatement();
 
 					/**
-					 * checking if there is already product in data base
-					 * with same code as product we want to add
-					 * If there is, show message dialog and exit 
+					 * checking if there is already product in data base with
+					 * same code as product we want to add If there is, show
+					 * message dialog and exit
 					 */
 					ResultSet result = statement
 							.executeQuery("select * from product where code ="
 									+ productCode);
-					while (result.next()) {
-						if (productCode == result.getLong(3)) {
-							JOptionPane.showMessageDialog(null,
-									"Product code already exist");
-							System.exit(1);
-						}
-						
+
+					if (result.next()) {
+						JOptionPane.showMessageDialog(null,
+								"Product code already exist");
+						System.exit(1);
 					}
+
 					/**
 					 * inserting product into data base
 					 */
 
 					String query = "insert into product (id, name, code, price) Values (null"
-							+ ",'"
-							+ productName
-							+ "',"
-							+ productCode
-							+ ","
-							+ price + ");";
+							+ "," + "?" + "," + "?" + "," + "?" + ");";
 
+					PreparedStatement pstmt = conn.prepareStatement(query);
+					pstmt.setString(1, productName);
+					pstmt.setLong(2, productCode);
+					pstmt.setDouble(3, price);
 					/**
 					 * executing query
 					 */
-					statement.executeUpdate(query);
 
+					pstmt.execute();
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 					System.exit(1);

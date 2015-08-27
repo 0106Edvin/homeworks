@@ -5,8 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 
 public class ComplaintsBook extends JFrame {
 	private static final long serialVersionUID = -5449667027580959489L;
-	
+
 	/**
 	 * creating text field, label , text area, and button
 	 */
@@ -66,8 +66,8 @@ public class ComplaintsBook extends JFrame {
 				 * taking a name from text field and putting into string name
 				 * taking complaint from area and putting into string complaints
 				 */
-				String name = fullName.getText().toString();
-				String complaints = complaint.getText().toString();
+				String name = fullName.getText();
+				String complaints = complaint.getText();
 
 				try {
 					/**
@@ -75,23 +75,33 @@ public class ComplaintsBook extends JFrame {
 					 */
 					conn = DriverManager
 							.getConnection("jdbc:sqlite:C:/Users/User/Desktop/sqlite3/data.db");
-					String query = "insert into complaint (id ,ts,date, name, complaint) Values (null"+","
-							+ "CURRENT_TIME" +","+"CURRENT_DATE" + ",'"+name + "','" + complaints + "');";
-					
-					Statement statement = conn.createStatement();
+
+					String query = "insert into complaint (id ,ts,date, name, complaint) Values (null"
+							+ ","
+							+ "CURRENT_TIME"
+							+ ","
+							+ "CURRENT_DATE"
+							+ ","
+							+ "?" + "," + "?" + ");";
+
+					PreparedStatement pstmt = conn.prepareStatement(query);
+					pstmt.setString(1, name);
+					pstmt.setString(2, complaints);
 					/**
 					 * executing query
 					 */
-					statement.execute(query);
 
+					pstmt.execute();
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 					System.exit(1);
 				}
 				/**
-				 * option pane that will display if everything goes right, and closing system
+				 * option pane that will display if everything goes right, and
+				 * closing system
 				 */
-				JOptionPane.showMessageDialog(null, "Your complaint has been successfully submitted");
+				JOptionPane.showMessageDialog(null,
+						"Your complaint has been successfully submitted");
 				System.exit(1);
 			}
 		});
