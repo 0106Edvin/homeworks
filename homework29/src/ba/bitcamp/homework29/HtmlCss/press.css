@@ -1,0 +1,29 @@
+html{
+	background-image: url(http://wallcomphd.com/wp-content/uploads/2015/04/Barcelona-FC-Wallpaper-Logo-HD.jpg);
+	
+}
+
+table td *{
+
+	padding: 20px;
+	color: black;
+	font-size: 25px;
+
+}
+#h1{
+	text-align: center;
+	font-size: 35px;
+	font-family: Comic;
+}
+#contact{
+	font-style: bold;
+	font-size: 18px;
+}
+
+#emad{
+	float: left;
+}
+
+#id{
+	padding-left: 40px;
+}
